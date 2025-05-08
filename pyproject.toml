@@ -1,0 +1,117 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.urls]
+
+
+[project]
+name = "pipeline_optimization"
+dynamic = ["version"]
+description = "Trunk Tools data pipeline optimization exercise"
+authors = [{ email = "engineering@trunk.tools" }]
+requires-python = ">=3.12"
+
+dependencies = [
+    "pydantic>=2.0.0",
+    "psutil>=5.9.0",
+    "tabulate>=0.9.0",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.envs.base]
+template = "base"
+python = "3.12"
+type = "virtual"
+installer = "uv"
+
+[tool.hatch.envs.default]
+template = "base"
+path = ".venv"
+extra-dependencies = [
+    "pytest~=8.2.0",
+    "pytest-env~=1.1.3",
+    "pytest-asyncio~=0.24.0"
+]
+
+[tool.hatch.envs.default.scripts]
+pipeline = "python src/pipeline_optimization/main.py {args:}"
+benchmark = "python src/pipeline_optimization/cli/run_benchmark.py {args:}"
+compare-benchmarks = "python src/pipeline_optimization/cli/compare_benchmarks.py {args:}"
+test = "pytest {args:-v src}"
+
+[tool.hatch.envs.hatch-static-analysis]
+config-path = "ruff_defaults.toml"
+# dependencies = ["ruff~=0.6.0"]
+
+[tool.hatch.envs.checks]
+# dependencies = ["pyright~=1.1.384", "ruff~=0.6.0"]
+
+[tool.hatch.envs.checks.scripts]
+check-fmt = "hatch fmt --check {args:}"
+check-type = "pyright"
+fix-fmt = "hatch fmt -f {args:}"
+fix-lint = "hatch fmt -l {args:}"
+fix = ["fix-lint", "fix-fmt", "check-type"]
+check = ["check-fmt", "check-type"]
+
+[tool.ruff]
+line-length = 120
+extend = "ruff_defaults.toml"
+extend-exclude = []
+
+[tool.ruff.lint]
+extend-ignore = [
+    "FBT001",
+    "FBT002",
+    # Enable for optimizations
+    "TCH001",
+    "TCH002",
+    "G004",
+    "S101",
+    "INP001"
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pipeline_optimization"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/__init__.py" = [
+    "F401", # Unused import
+    "F403", # Import * used
+]
+"**/__tests__/**" = [
+    "S101",    # Use of assert
+    "PLR2004", # Magic numbers
+    "ARG002",  # Unused args, pytest fixtures
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:Connecting to https.//localhost.9200 using SSL with verify_certs=False is insecure:UserWarning",
+    "ignore::urllib3.exceptions.InsecureRequestWarning",
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)5s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.hatch.version]
+path = "src/pipeline_optimization/__init__.py"
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__", "src/typestubs"]
+ignore = []
+defineConstant = { DEBUG = true }
+stubPath = "src/stubs"
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+
+executionEnvironments = [{ root = "src" }]
