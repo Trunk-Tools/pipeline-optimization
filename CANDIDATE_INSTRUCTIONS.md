@@ -8,11 +8,7 @@ In this exercise, you'll optimize an inefficient data pipeline that processes te
 
 1. Ensure you have [hatch](https://hatch.pypa.io/latest/) installed
 2. Clone the repository and `cd` into it
-3. Run the baseline implementation:
-   ```
-   hatch run pipeline --test-case small
-   ```
-4. Benchmark the current performance:
+3. Benchmark the current performance:
    ```
    hatch run benchmark --test-case small
    ```
