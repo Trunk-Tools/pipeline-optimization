@@ -13,13 +13,6 @@ class TaskOrchestrator:
 
     This class contains multiple performance issues and poor design patterns that
     candidates are expected to identify and optimize during the interview exercise.
-
-    Key inefficiencies include:
-    - Sequential processing of all tasks
-    - No error handling or retries for task failures
-    - Repeated loading of resources
-    - Lack of caching for expensive operations
-    - Inefficient data structures and algorithms
     """
 
     def __init__(self) -> None:
