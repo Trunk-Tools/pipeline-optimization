@@ -29,13 +29,13 @@ async def main() -> None:
     parser.add_argument(
         "--test-case",
         type=str,
-        default="all",
+        default="small",
         help="Specify which test case to benchmark. Options: small, medium, large, all",
     )
     parser.add_argument(
         "--iterations",
         type=int,
-        default=3,
+        default=5,
         help="Number of iterations for each benchmark",
     )
     parser.add_argument(

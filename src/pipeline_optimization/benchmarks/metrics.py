@@ -54,6 +54,8 @@ class MetricsCollector:
         self.initial_memory: float = 0.0
         self.peak_memory: float = 0.0
         self.cpu_utilization: List[float] = []
+        # Snapshot CPU times at pipeline start (will use CPU-time delta for avg CPU%)
+        self._cpu_start_times = None
 
         # Performance metrics
         self.throughput_word_per_sec: List[float] = []
@@ -69,6 +71,8 @@ class MetricsCollector:
         process = psutil.Process()
         self.initial_memory = process.memory_info().rss / (1024 * 1024)  # Convert to MB
         self.peak_memory = self.initial_memory
+        # Snapshot CPU times at pipeline start for accurate avg CPU%
+        self._cpu_start_times = process.cpu_times()
 
         # Reset per-pipeline metrics
         self.cpu_utilization = []
@@ -146,13 +150,25 @@ class MetricsCollector:
             else 0
         )
 
-        # CPU utilization
-        avg_cpu = (
-            sum(self.cpu_utilization) / len(self.cpu_utilization)
-            if self.cpu_utilization
-            else 0
-        )
-        max_cpu = max(self.cpu_utilization) if self.cpu_utilization else 0
+        # CPU utilization based on CPU-time delta during pipeline run
+        process = psutil.Process()
+        end_cpu_times = process.cpu_times()
+        if self._cpu_start_times is not None and self.pipeline_start_time is not None:
+            start_cpu = self._cpu_start_times
+            cpu_time_used = (end_cpu_times.user + end_cpu_times.system) - (
+                start_cpu.user + start_cpu.system
+            )
+            wall_time = self.pipeline_end_time - self.pipeline_start_time
+            num_cpus = psutil.cpu_count(logical=True) or 1
+            if wall_time > 0 and num_cpus > 0:
+                avg_cpu = cpu_time_used / wall_time / num_cpus * 100
+                max_cpu = avg_cpu
+            else:
+                avg_cpu = 0.0
+                max_cpu = 0.0
+        else:
+            avg_cpu = 0.0
+            max_cpu = 0.0
 
         # Memory usage
         memory_growth = self.peak_memory - self.initial_memory

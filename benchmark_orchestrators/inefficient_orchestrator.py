@@ -23,10 +23,14 @@ class TaskOrchestrator:
     """
 
     def __init__(self) -> None:
+        # INEFFICIENCY: Loading the dictionary on every instantiation
+        # This should be done once at module level or cached
         self.dictionary = None
         self._load_dictionary()
 
     def _load_dictionary(self) -> None:
+        # INEFFICIENCY: Expensive JSON parsing operation performed unnecessarily
+        # This could be cached or loaded only once
         with open("src/pipeline_optimization/resources/english_dictionary.json") as f:
             self.dictionary = json.load(f)
 
@@ -44,31 +48,41 @@ class TaskOrchestrator:
         # Start timing the pipeline execution
         start_time = time.perf_counter()
 
+        # INEFFICIENCY: No input validation
+        if not isinstance(text_input, str):
+            raise ValueError("Input must be a string")
+
+        # INEFFICIENCY: Processing input sequentially with no parallelism
         # Stage 1: Filter the input text
         filtered_input = await filter_input(text_input)
 
         # Stage 2: Get individual words from the filtered input
         words = await get_words(filtered_input)
 
-        # Stage 3: Find anagrams for each word
+        # INEFFICIENCY: Sequential processing of words
+        # This could be parallelized to improve performance
         all_anagrams: List[str] = []
         for word in words:
+            # INEFFICIENCY: No caching of anagram results for repeated words
             print(f"Finding anagrams for {word}")
             anagrams = await find_anagrams(word)
             all_anagrams.extend(anagrams)
 
-        # Stage 4: Count the anagrams
+        # INEFFICIENCY: Inefficient counting algorithm
+        # Could use Counter from collections instead
         anagram_counts: Dict[str, int] = {}
         for anagram in all_anagrams:
+            # INEFFICIENCY: Repeated dictionary lookups
             if anagram not in anagram_counts:
                 anagram_counts[anagram] = 0
             anagram_counts[anagram] += 1
+
+        # INEFFICIENCY: No error handling for task failures
+        # Should implement retries with exponential backoff
 
         # Calculate execution time
         end_time = time.perf_counter()
         runtime_ms = (end_time - start_time) * 1000
 
-        return {
-            "runtime": runtime_ms,
-            "anagram_counts": anagram_counts,
-        }
+        # INEFFICIENCY: No error handling - just raises the error
+        return {"runtime": runtime_ms, "anagram_counts": anagram_counts}

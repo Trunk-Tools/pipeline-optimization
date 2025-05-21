@@ -14,10 +14,11 @@ import os
 import sys
 from typing import Any, Dict
 
+from tabulate import tabulate
+
 from pipeline_optimization.benchmarks.benchmarker import PipelineBenchmarker
 from pipeline_optimization.benchmarks.metrics import MetricsCollector
 from pipeline_optimization.orchestrator import TaskOrchestrator
-from tabulate import tabulate
 
 
 def load_orchestrator_from_file(file_path: str) -> Any:
@@ -293,6 +294,12 @@ def print_comparison_table(summary: Dict[str, Dict[str, Any]]) -> None:
                 formatted = format_value(value * 100, is_best, "{:.1f}")
             elif metric_key == "throughput_words_per_sec":
                 formatted = format_value(value, is_best, "{:.1f}")
+            elif metric_key == "avg_runtime_ms":
+                # Increased precision for runtime (4 decimal places)
+                formatted = format_value(value, is_best, "{:.4f}")
+            elif metric_key == "avg_cpu_percent":
+                # Increased precision for CPU usage (3 decimal places)
+                formatted = format_value(value, is_best, "{:.3f}")
             else:
                 formatted = format_value(value, is_best, "{:.2f}")
 
@@ -324,13 +331,13 @@ async def main() -> None:
     parser.add_argument(
         "--compare-dir",
         type=str,
-        required=True,
+        default="benchmark_orchestrators",
         help="Directory containing orchestrator implementations to compare",
     )
     parser.add_argument(
         "--test-case",
         type=str,
-        default="all",
+        default="small",
         help="Specify which test case to benchmark. Options: small, medium, large, all",
     )
     parser.add_argument(

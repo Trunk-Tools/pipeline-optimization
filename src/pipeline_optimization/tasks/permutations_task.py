@@ -1,8 +1,8 @@
 from pipeline_optimization.tasks.task_decorator import task
 
 
-@task(failure_rate=0.01)
-def permutations(word: str):
+@task(failure_rate=0.01, sleep_time=0.1)
+async def permutations(word: str):
     if len(word) == 0:
         return []
     if len(word) == 1:
@@ -19,7 +19,7 @@ def permutations(word: str):
         tail[i] = chars[0]
         tail.pop(0)
 
-        tail_perms = permutations("".join(tail))
+        tail_perms = await permutations("".join(tail))
 
         for tail_perm in tail_perms:
             perms.append(first_char + tail_perm)

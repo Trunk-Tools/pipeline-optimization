@@ -63,10 +63,10 @@ class BenchmarkResult:
             "iterations": self.iterations,
             "successful_iterations": self.successful_iterations,
             "success_rate": self.success_rate,
-            "average_runtime_ms": round(self.average_runtime_ms, 2),
-            "min_runtime_ms": round(self.min_runtime_ms, 2),
-            "max_runtime_ms": round(self.max_runtime_ms, 2),
-            "stddev_runtime_ms": round(self.stddev_runtime_ms, 2),
+            "average_runtime_ms": round(self.average_runtime_ms, 4),
+            "min_runtime_ms": round(self.min_runtime_ms, 4),
+            "max_runtime_ms": round(self.max_runtime_ms, 4),
+            "stddev_runtime_ms": round(self.stddev_runtime_ms, 4),
             "metrics": self.get_aggregated_metrics(),
         }
 
@@ -141,11 +141,11 @@ class BenchmarkResult:
             )
         if cpu_avgs:
             result["resource_metrics"]["avg_cpu_percent"] = round(
-                statistics.mean(cpu_avgs), 2
+                statistics.mean(cpu_avgs), 3
             )
         if throughputs:
             result["pipeline_metrics"]["avg_throughput_words_per_second"] = round(
-                statistics.mean(throughputs), 2
+                statistics.mean(throughputs), 1
             )
 
         # Calculate averages for task metrics
@@ -155,7 +155,7 @@ class BenchmarkResult:
                     statistics.mean(metrics_data["success_rates"]), 2
                 ),
                 "avg_execution_time_ms": round(
-                    statistics.mean(metrics_data["avg_execution_times_ms"]), 2
+                    statistics.mean(metrics_data["avg_execution_times_ms"]), 4
                 ),
                 "avg_attempts": round(statistics.mean(metrics_data["attempts"]), 2),
             }
