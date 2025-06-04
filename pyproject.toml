@@ -37,6 +37,7 @@ extra-dependencies = [
 ]
 
 [tool.hatch.envs.default.scripts]
+orchestrator = "python src/pipeline_optimization/orchestrator.py {args:}"
 pipeline = "python src/pipeline_optimization/main.py {args:}"
 benchmark = "python src/pipeline_optimization/cli/run_benchmark.py {args:}"
 compare-benchmarks = "python src/pipeline_optimization/cli/compare_benchmarks.py {args:}"

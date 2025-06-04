@@ -1,10 +1,14 @@
+import asyncio
 import json
+import sys
 import time
 from typing import Any, Dict, List
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
 from pipeline_optimization.tasks.get_words_task import get_words
+
+# TODO: ONLY edit this file
 
 
 class TaskOrchestrator:
@@ -65,3 +69,25 @@ class TaskOrchestrator:
             "runtime": runtime_ms,
             "anagram_counts": anagram_counts,
         }
+
+
+async def main():
+    """Main entry point for the orchestrator script."""
+    # Get input text from command line argument or use a default
+    text_input = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else "Hello world, this is a test input for anagram processing."
+    )
+
+    orchestrator = TaskOrchestrator()
+    result = await orchestrator.process_text(text_input)
+
+    print(f"Pipeline runtime: {result['runtime']:.2f} ms")
+    print("Anagram counts:")
+    for anagram, count in result["anagram_counts"].items():
+        print(f"  {anagram}: {count}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
