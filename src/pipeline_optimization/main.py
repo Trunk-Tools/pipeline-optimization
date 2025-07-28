@@ -26,13 +26,13 @@ async def run_pipeline(
 
     # Run the pipeline
     start_time = time.perf_counter()
-    result = orchestrator.process_text(test_case["text"])
+    result = await orchestrator.process_text(test_case["text"])
     end_time = time.perf_counter()
 
     runtime_ms = (end_time - start_time) * 1000
 
     print(f"Pipeline execution completed in {runtime_ms:.2f}ms")
-    print(json.dumps(result, indent=2))
+    print(json.dumps(result, indent=2, default=str))
 
     # Validate results
     expected_runtime = test_case["expected"]["runtime"]
