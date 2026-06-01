@@ -37,11 +37,11 @@ As you complete the exercise, please document your thought process in a README.m
 
 ## Getting Started
 
-1. You'll need to install [hatch](https://hatch.pypa.io/latest/)
+1. You'll need to install [uv](https://docs.astral.sh/uv/) and [task](https://taskfile.dev/)
 2. Clone this repo
 3. `cd pipeline-optimization`
-4. `hatch run pipeline`. This will setup your local virtual environment and run the pipeline for the "small" test case.
-   1. To run a specific test case or to run all of them use the `--test-case` flagrun: `hatch run pipeline --test-case small|medium|large|all`
+4. `task pipeline`. This will set up your local virtual environment and run the pipeline for the "small" test case.
+   1. To run a specific test case or to run all of them use the `--test-case` flag: `task pipeline -- --test-case small|medium|large|all`
 
 ## Benchmarking Tools
 
@@ -53,16 +53,16 @@ The `benchmark` command runs performance metrics on a single orchestrator implem
 
 ```bash
 # Run benchmark on all test cases
-hatch run benchmark
+task benchmark
 
 # Run benchmark on a specific test case
-hatch run benchmark --test-case small
+task benchmark -- --test-case small
 
 # Run with more iterations for better statistical significance
-hatch run benchmark --iterations 5
+task benchmark -- --iterations 5
 
 # Show detailed metrics
-hatch run benchmark --detailed
+task benchmark -- --detailed
 ```
 
 This tool measures:
@@ -79,16 +79,16 @@ The `compare-benchmarks` command allows you to compare multiple orchestrator imp
 
 ```bash
 # Compare all orchestrators in a directory
-hatch run compare-benchmarks --compare-dir benchmark_orchestrators
+task compare-benchmarks -- --compare-dir benchmark_orchestrators
 
 # Compare specific test case
-hatch run compare-benchmarks --compare-dir benchmark_orchestrators --test-case small
+task compare-benchmarks -- --compare-dir benchmark_orchestrators --test-case small
 
 # Run more iterations for each test
-hatch run compare-benchmarks --compare-dir benchmark_orchestrators --iterations 5
+task compare-benchmarks -- --compare-dir benchmark_orchestrators --iterations 5
 
 # Show detailed metrics
-hatch run compare-benchmarks --compare-dir benchmark_orchestrators --detailed
+task compare-benchmarks -- --compare-dir benchmark_orchestrators --detailed
 ```
 
 This tool:

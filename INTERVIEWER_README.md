@@ -51,8 +51,7 @@ The candidate's solution should be evaluated on:
 1. Prepare the environment:
 
    ```
-   pip install hatch
-   hatch run pipeline --test-case small
+   task pipeline -- --test-case small
    ```
 
 2. Have the candidate review `CANDIDATE_INSTRUCTIONS.md`
@@ -60,14 +59,14 @@ The candidate's solution should be evaluated on:
 3. Have the candidate run benchmarks to see the current performance:
 
    ```
-   hatch run benchmark
+   task benchmark
    ```
 
 4. Instruct them to optimize `src/pipeline_optimization/orchestrator.py`
 
 5. After they're done, have them run benchmarks again to measure improvement:
    ```
-   hatch run benchmark
+   task benchmark
    ```
 
 ## Expected Improvements
@@ -111,4 +110,4 @@ This is just one approach - the candidate may implement different but equally va
 ## Troubleshooting
 
 1. If the benchmark runs too slowly, the `--test-case small` flag can be used to test only the smallest test case.
-2. If there are dependency issues, ensure the candidate uses the provided `hatch` environment.
+2. If there are dependency issues, ensure the candidate uses the provided `uv` environment (`uv sync`).
