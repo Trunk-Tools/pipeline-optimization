@@ -2,7 +2,7 @@ import argparse
 import asyncio
 import json
 import time
-from typing import Any, Dict
+from typing import Any
 
 from pipeline_optimization.benchmarks.benchmarker import PipelineBenchmarker
 from pipeline_optimization.benchmarks.metrics import MetricsCollector
@@ -11,7 +11,7 @@ from pipeline_optimization.orchestrator import TaskOrchestrator
 
 async def run_pipeline(
     test_case_name: str,
-    test_case: Dict[str, Any],
+    test_case: dict[str, Any],
     orchestrator: TaskOrchestrator,
 ) -> None:
     """

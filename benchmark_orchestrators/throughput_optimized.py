@@ -9,7 +9,7 @@ import json
 import os
 import time
 from collections import Counter
-from typing import Any, Dict, List
+from typing import Any
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
@@ -37,7 +37,7 @@ class TaskOrchestrator:
         # Semaphore to limit concurrent word processing
         self._semaphore = asyncio.Semaphore(concurrency)
 
-    async def process_text(self, text_input: str) -> Dict[str, Any]:
+    async def process_text(self, text_input: str) -> dict[str, Any]:
         """
         Process text input asynchronously, finding anagrams concurrently to maximize throughput.
         """
@@ -60,7 +60,7 @@ class TaskOrchestrator:
             unique_words = list(set(words))
 
             # Launch concurrent anagram tasks
-            tasks: List[asyncio.Task] = []
+            tasks: list[asyncio.Task] = []
             for word in unique_words:
                 tasks.append(asyncio.create_task(self._process_word(word)))
 
@@ -85,7 +85,7 @@ class TaskOrchestrator:
                 "error": str(e),
             }
 
-    async def _process_word(self, word: str) -> List[str]:
+    async def _process_word(self, word: str) -> list[str]:
         """
         Find anagrams for a single word with retry and concurrency control.
         """

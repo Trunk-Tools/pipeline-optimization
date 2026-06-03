@@ -2,7 +2,7 @@ import gc
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import psutil
 
@@ -16,7 +16,7 @@ class TaskMetrics:
     successes: int = 0
     failures: int = 0
     total_execution_time: float = 0.0
-    execution_times: List[float] = field(default_factory=list)
+    execution_times: list[float] = field(default_factory=list)
 
     @property
     def success_rate(self) -> float:
@@ -42,7 +42,7 @@ class MetricsCollector:
     """
 
     def __init__(self) -> None:
-        self.task_metrics: Dict[str, TaskMetrics] = defaultdict(
+        self.task_metrics: dict[str, TaskMetrics] = defaultdict(
             lambda: TaskMetrics("unknown")
         )
         self.pipeline_start_time: Optional[float] = None
@@ -53,12 +53,12 @@ class MetricsCollector:
         # Resource usage metrics
         self.initial_memory: float = 0.0
         self.peak_memory: float = 0.0
-        self.cpu_utilization: List[float] = []
+        self.cpu_utilization: list[float] = []
         # Snapshot CPU times at pipeline start (will use CPU-time delta for avg CPU%)
         self._cpu_start_times = None
 
         # Performance metrics
-        self.throughput_word_per_sec: List[float] = []
+        self.throughput_word_per_sec: list[float] = []
 
     def start_pipeline(self) -> None:
         """Record the start of a pipeline execution and capture initial resource usage"""
@@ -132,7 +132,7 @@ class MetricsCollector:
         else:
             metric.failures += 1
 
-    def get_metrics_report(self) -> Dict[str, Any]:
+    def get_metrics_report(self) -> dict[str, Any]:
         """
         Generate a comprehensive metrics report.
 

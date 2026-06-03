@@ -12,7 +12,7 @@ import importlib.util
 import json
 import os
 import sys
-from typing import Any, Dict
+from typing import Any
 
 from tabulate import tabulate
 
@@ -54,7 +54,7 @@ def load_orchestrator_from_file(file_path: str) -> Any:
     return module.TaskOrchestrator()
 
 
-def find_orchestrators(compare_dir: str) -> Dict[str, Any]:
+def find_orchestrators(compare_dir: str) -> dict[str, Any]:
     """
     Find all Python files in the specified directory and load their orchestrators.
 
@@ -121,11 +121,11 @@ def format_value(value: float, is_best: bool, format_str: str = "{:.2f}") -> str
 
 
 async def run_benchmarks(
-    orchestrators: Dict[str, Any],
+    orchestrators: dict[str, Any],
     iterations: int = 3,
     test_case: str = "all",
     show_details: bool = False,
-) -> Dict[str, Dict[str, Any]]:
+) -> dict[str, dict[str, Any]]:
     """
     Run benchmarks for all orchestrators and collect results.
 
@@ -143,7 +143,7 @@ async def run_benchmarks(
         test_cases = json.load(file)
 
     # Prepare results structure
-    all_results: Dict[str, Dict[str, Any]] = {}
+    all_results: dict[str, dict[str, Any]] = {}
 
     # Run benchmarks for each orchestrator
     for name, orchestrator in orchestrators.items():
@@ -173,8 +173,8 @@ async def run_benchmarks(
 
 
 def aggregate_metrics(
-    all_results: Dict[str, Dict[str, Any]],
-) -> Dict[str, Dict[str, Any]]:
+    all_results: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
     """
     Aggregate metrics across all test cases for each orchestrator.
 
@@ -238,7 +238,7 @@ def aggregate_metrics(
     return summary
 
 
-def print_comparison_table(summary: Dict[str, Dict[str, Any]]) -> None:
+def print_comparison_table(summary: dict[str, dict[str, Any]]) -> None:
     """
     Print a side-by-side comparison table of all orchestrators.
 
