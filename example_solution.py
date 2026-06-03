@@ -12,7 +12,7 @@ import logging
 import time
 from collections import Counter
 from functools import lru_cache
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
@@ -57,9 +57,9 @@ class OptimizedOrchestrator:
         self.initial_backoff = initial_backoff
 
         # In-memory cache for anagrams
-        self.anagram_cache: Dict[str, List[str]] = {}
+        self.anagram_cache: dict[str, list[str]] = {}
 
-    async def process_text(self, text_input: str) -> Dict[str, Any]:
+    async def process_text(self, text_input: str) -> dict[str, Any]:
         """
         Process the input text through the pipeline, finding anagrams and
         counting occurrences.
@@ -150,7 +150,7 @@ class OptimizedOrchestrator:
                 backoff *= 2
 
     @lru_cache(maxsize=1000)
-    async def _find_anagrams_cached(self, word: str) -> List[str]:
+    async def _find_anagrams_cached(self, word: str) -> list[str]:
         """
         Find anagrams for a word with caching and retry logic.
 
@@ -164,7 +164,7 @@ class OptimizedOrchestrator:
             task=find_anagrams, input_data=word, task_name=f"find_anagrams({word})"
         )
 
-    async def _process_words_concurrently(self, words: List[str]) -> List[str]:
+    async def _process_words_concurrently(self, words: list[str]) -> list[str]:
         """
         Process words concurrently to find anagrams.
 
@@ -183,7 +183,7 @@ class OptimizedOrchestrator:
         # Process words concurrently with a bounded semaphore to limit concurrency
         semaphore = asyncio.Semaphore(self.max_workers)
 
-        async def process_word(word: str) -> List[str]:
+        async def process_word(word: str) -> list[str]:
             async with semaphore:
                 return await self._find_anagrams_cached(word)
 

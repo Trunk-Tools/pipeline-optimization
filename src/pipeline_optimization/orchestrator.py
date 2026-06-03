@@ -2,7 +2,7 @@ import asyncio
 import json
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
@@ -27,7 +27,7 @@ class TaskOrchestrator:
         with open("src/pipeline_optimization/resources/english_dictionary.json") as f:
             self.dictionary = json.load(f)
 
-    async def process_text(self, text_input: str) -> Dict[str, Any]:
+    async def process_text(self, text_input: str) -> dict[str, Any]:
         """
         Process the input text through the pipeline, finding anagrams and
         counting occurrences.
@@ -48,14 +48,14 @@ class TaskOrchestrator:
         words = await get_words(filtered_input)
 
         # Stage 3: Find anagrams for each word
-        all_anagrams: List[str] = []
+        all_anagrams: list[str] = []
         for word in words:
             print(f"Finding anagrams for {word}")
             anagrams = await find_anagrams(word)
             all_anagrams.extend(anagrams)
 
         # Stage 4: Count the anagrams
-        anagram_counts: Dict[str, int] = {}
+        anagram_counts: dict[str, int] = {}
         for anagram in all_anagrams:
             if anagram not in anagram_counts:
                 anagram_counts[anagram] = 0

@@ -16,7 +16,7 @@ import gc
 import json
 import time
 from contextlib import contextmanager
-from typing import Any, Dict, Generator, List
+from typing import Any, Generator
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
@@ -31,7 +31,7 @@ DICTIONARY_PATH = "src/pipeline_optimization/resources/english_dictionary.json"
 class WordSet:
     __slots__ = ("words",)
 
-    def __init__(self, words: List[str] = None):
+    def __init__(self, words: list[str] = None):
         self.words = words or []
 
 
@@ -91,7 +91,7 @@ class TaskOrchestrator:
         # Force garbage collection on startup to start with minimal footprint
         gc.collect()
 
-    def process_text(self, text_input: str) -> Dict[str, Any]:
+    def process_text(self, text_input: str) -> dict[str, Any]:
         """
         Process text through the pipeline with minimal memory footprint.
 
@@ -156,7 +156,7 @@ class TaskOrchestrator:
                 # Always do an aggressive garbage collection to release memory
                 gc.collect(2)  # Use generation 2 collection for more thorough cleanup
 
-    def _run_memory_efficient_pipeline(self, text_input: str) -> Dict[str, int]:
+    def _run_memory_efficient_pipeline(self, text_input: str) -> dict[str, int]:
         """
         Run the pipeline with minimal memory usage.
 
@@ -245,7 +245,7 @@ class TaskOrchestrator:
             # Return empty result
             return {}
 
-    def _find_anagrams_minimal_memory(self, word: str) -> List[str]:
+    def _find_anagrams_minimal_memory(self, word: str) -> list[str]:
         """
         Find anagrams for a word with minimal memory usage.
 
@@ -274,8 +274,8 @@ class TaskOrchestrator:
 
     @staticmethod
     def _chunk_generator(
-        items: List[str], chunk_size: int
-    ) -> Generator[List[str], None, None]:
+        items: list[str], chunk_size: int
+    ) -> Generator[list[str], None, None]:
         """
         Create a generator that yields chunks of an iterable.
 

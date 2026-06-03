@@ -4,7 +4,7 @@ import json
 import statistics
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any
 
 from pipeline_optimization.benchmarks.metrics import MetricsCollector
 from pipeline_optimization.orchestrator import TaskOrchestrator
@@ -17,9 +17,9 @@ class BenchmarkResult:
     test_case: str
     iterations: int
     successful_iterations: int
-    execution_times_ms: List[float] = field(default_factory=list)
-    errors: List[Exception] = field(default_factory=list)
-    metrics_reports: List[Dict[str, Any]] = field(default_factory=list)
+    execution_times_ms: list[float] = field(default_factory=list)
+    errors: list[Exception] = field(default_factory=list)
+    metrics_reports: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def success_rate(self) -> float:
@@ -56,7 +56,7 @@ class BenchmarkResult:
             return 0.0
         return statistics.stdev(self.execution_times_ms)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert benchmark result to dictionary for reporting"""
         return {
             "test_case": self.test_case,
@@ -70,7 +70,7 @@ class BenchmarkResult:
             "metrics": self.get_aggregated_metrics(),
         }
 
-    def get_aggregated_metrics(self) -> Dict[str, Any]:
+    def get_aggregated_metrics(self) -> dict[str, Any]:
         """Aggregate metrics from all successful runs"""
         if not self.metrics_reports:
             return {}
@@ -96,7 +96,7 @@ class BenchmarkResult:
         throughputs = []
 
         # Task metrics collection
-        task_metrics: Dict[str, Dict[str, List[float]]] = {}
+        task_metrics: dict[str, dict[str, list[float]]] = {}
 
         for report in self.metrics_reports:
             if "resource_metrics" in report:
@@ -279,7 +279,7 @@ class PipelineBenchmarker:
         return result
 
     def _validate_result(
-        self, test_case_name: str, result: Dict[str, Any], expected: Dict[str, Any]
+        self, test_case_name: str, result: dict[str, Any], expected: dict[str, Any]
     ) -> None:
         """
         Validate that the pipeline result matches the expected output.
@@ -304,7 +304,7 @@ class PipelineBenchmarker:
 
     async def run_all_benchmarks(
         self, iterations: int = 3
-    ) -> Dict[str, BenchmarkResult]:
+    ) -> dict[str, BenchmarkResult]:
         """
         Run benchmarks for all test cases.
 
@@ -314,7 +314,7 @@ class PipelineBenchmarker:
         Returns:
             Dictionary mapping test case names to BenchmarkResult objects
         """
-        results: Dict[str, BenchmarkResult] = {}
+        results: dict[str, BenchmarkResult] = {}
 
         for test_case_name in self.test_cases.keys():
             result = await self.run_benchmark(test_case_name, iterations)
@@ -322,7 +322,7 @@ class PipelineBenchmarker:
 
         return results
 
-    def print_benchmark_report(self, results: Dict[str, BenchmarkResult]) -> None:
+    def print_benchmark_report(self, results: dict[str, BenchmarkResult]) -> None:
         """
         Print a formatted report of benchmark results.
 

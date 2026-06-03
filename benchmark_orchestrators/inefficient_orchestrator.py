@@ -1,6 +1,6 @@
 import json
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 from pipeline_optimization.tasks.filter_input_task import filter_input
 from pipeline_optimization.tasks.find_anagrams_task import find_anagrams
@@ -34,7 +34,7 @@ class TaskOrchestrator:
         with open("src/pipeline_optimization/resources/english_dictionary.json") as f:
             self.dictionary = json.load(f)
 
-    async def process_text(self, text_input: str) -> Dict[str, Any]:
+    async def process_text(self, text_input: str) -> dict[str, Any]:
         """
         Process the input text through the pipeline, finding anagrams and
         counting occurrences.
@@ -61,7 +61,7 @@ class TaskOrchestrator:
 
         # INEFFICIENCY: Sequential processing of words
         # This could be parallelized to improve performance
-        all_anagrams: List[str] = []
+        all_anagrams: list[str] = []
         for word in words:
             # INEFFICIENCY: No caching of anagram results for repeated words
             print(f"Finding anagrams for {word}")
@@ -70,7 +70,7 @@ class TaskOrchestrator:
 
         # INEFFICIENCY: Inefficient counting algorithm
         # Could use Counter from collections instead
-        anagram_counts: Dict[str, int] = {}
+        anagram_counts: dict[str, int] = {}
         for anagram in all_anagrams:
             # INEFFICIENCY: Repeated dictionary lookups
             if anagram not in anagram_counts:
