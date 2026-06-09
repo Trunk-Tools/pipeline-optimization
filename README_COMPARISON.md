@@ -30,13 +30,13 @@ You can also run the comparison tool manually with various options:
 
 ```bash
 # Run comparison with specific test cases
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --test-case small,medium
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --test-case small,medium
 
 # Run comparison with more iterations
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --iterations 5
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --iterations 5
 
 # Show detailed metrics for each orchestrator
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --detailed
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --detailed
 ```
 
 ## Included Implementations

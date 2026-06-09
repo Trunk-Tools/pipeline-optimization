@@ -10,48 +10,27 @@ authors = [{ email = "engineering@trunk.tools" }]
 requires-python = ">=3.14"
 
 dependencies = [
-    "pydantic>=2.0.0",
-    "psutil>=5.9.0",
-    "tabulate>=0.9.0",
+    "pydantic>=2.0.0,<3",
+    "psutil>=5.9.0,<6",
+    "tabulate~=0.10.0",
 ]
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.39.6,<2",
     "pytest~=8.2.0",
     "pytest-env~=1.1.3",
     "pytest-asyncio~=0.24.0",
 ]
 
+[project.scripts]
+main = "pipeline_optimization.main:main_sync"
+orchestrator = "pipeline_optimization.orchestrator:main_sync"
+benchmark = "pipeline_optimization.cli.run_benchmark:main_sync"
+compare-benchmarks = "pipeline_optimization.cli.compare_benchmarks:main_sync"
+
 [tool.ruff]
-line-length = 120
-extend = "ruff_defaults.toml"
-extend-exclude = []
-
-[tool.ruff.lint]
-extend-ignore = [
-    "FBT001",
-    "FBT002",
-    # Enable for optimizations
-    "TCH001",
-    "TCH002",
-    "G004",
-    "S101",
-    "INP001"
-]
-
-[tool.ruff.lint.isort]
-known-first-party = ["pipeline_optimization"]
-
-[tool.ruff.lint.extend-per-file-ignores]
-"**/__init__.py" = [
-    "F401", # Unused import
-    "F403", # Import * used
-]
-"**/__tests__/**" = [
-    "S101",    # Use of assert
-    "PLR2004", # Magic numbers
-    "ARG002",  # Unused args, pytest fixtures
-]
+extend = "ruff.toml"
 
 [tool.pytest.ini_options]
 log_cli = true
@@ -63,16 +42,10 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 path = "src/pipeline_optimization/__init__.py"
 
 [tool.pyright]
-include = ["src"]
-exclude = ["**/__pycache__", "src/typestubs"]
-ignore = []
+pythonPlatform = "All"
+pythonVersion = "3.14"
 defineConstant = { DEBUG = true }
-stubPath = "src/stubs"
 
 reportMissingImports = "error"
 reportMissingTypeStubs = false
-
-pythonVersion = "3.14"
-pythonPlatform = "Linux"
-
-executionEnvironments = [{ root = "src" }]
+reportUnusedCallResult = false

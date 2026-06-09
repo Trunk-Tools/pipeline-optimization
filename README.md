@@ -40,8 +40,8 @@ As you complete the exercise, please document your thought process in a README.m
 1. You'll need to install [uv](https://docs.astral.sh/uv/) and [task](https://taskfile.dev/)
 2. Clone this repo
 3. `cd pipeline-optimization`
-4. `task pipeline`. This will set up your local virtual environment and run the pipeline for the "small" test case.
-   1. To run a specific test case or to run all of them use the `--test-case` flag: `task pipeline -- --test-case small|medium|large|all`
+4. `uv run main`. This will set up your local virtual environment and run the pipeline for the "small" test case.
+   1. To run a specific test case or to run all of them use the `--test-case` flag: `uv run main --test-case small|medium|large|all`
 
 ## Benchmarking Tools
 
@@ -53,16 +53,16 @@ The `benchmark` command runs performance metrics on a single orchestrator implem
 
 ```bash
 # Run benchmark on all test cases
-task benchmark
+uv run benchmark
 
 # Run benchmark on a specific test case
-task benchmark -- --test-case small
+uv run benchmark --test-case small
 
 # Run with more iterations for better statistical significance
-task benchmark -- --iterations 5
+uv run benchmark --iterations 5
 
 # Show detailed metrics
-task benchmark -- --detailed
+uv run benchmark --detailed
 ```
 
 This tool measures:
@@ -79,16 +79,16 @@ The `compare-benchmarks` command allows you to compare multiple orchestrator imp
 
 ```bash
 # Compare all orchestrators in a directory
-task compare-benchmarks -- --compare-dir benchmark_orchestrators
+uv run compare-benchmarks --compare-dir benchmark_orchestrators
 
 # Compare specific test case
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --test-case small
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --test-case small
 
 # Run more iterations for each test
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --iterations 5
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --iterations 5
 
 # Show detailed metrics
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --detailed
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --detailed
 ```
 
 This tool:

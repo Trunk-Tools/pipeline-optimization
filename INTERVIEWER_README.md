@@ -51,7 +51,7 @@ The candidate's solution should be evaluated on:
 1. Prepare the environment:
 
    ```
-   task pipeline -- --test-case small
+   uv run main --test-case small
    ```
 
 2. Have the candidate review `CANDIDATE_INSTRUCTIONS.md`
@@ -59,14 +59,14 @@ The candidate's solution should be evaluated on:
 3. Have the candidate run benchmarks to see the current performance:
 
    ```
-   task benchmark
+   uv run benchmark
    ```
 
 4. Instruct them to optimize `src/pipeline_optimization/orchestrator.py`
 
 5. After they're done, have them run benchmarks again to measure improvement:
    ```
-   task benchmark
+   uv run benchmark
    ```
 
 ## Expected Improvements

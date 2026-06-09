@@ -89,5 +89,9 @@ async def main():
         print(f"  {anagram}: {count}")
 
 
-if __name__ == "__main__":
+def main_sync():
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    main_sync()

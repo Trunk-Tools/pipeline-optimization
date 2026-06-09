@@ -4,7 +4,7 @@ This tool allows you to compare the performance of multiple orchestrator impleme
 
 ## Prerequisites
 
-- Make sure you have [uv](https://docs.astral.sh/uv/) and [task](https://taskfile.dev/) installed
+- Make sure you have [uv](https://docs.astral.sh/uv/) installed
 - All orchestrator implementations should be placed in a directory with `.py` files
 - Each file should contain a `TaskOrchestrator` class
 
@@ -13,7 +13,7 @@ This tool allows you to compare the performance of multiple orchestrator impleme
 To run the benchmark comparison:
 
 ```bash
-task compare-benchmarks -- --compare-dir benchmark_orchestrators
+uv run compare-benchmarks --compare-dir benchmark_orchestrators
 ```
 
 This will:
@@ -33,7 +33,7 @@ This will:
 ## Example
 
 ```bash
-task compare-benchmarks -- --compare-dir benchmark_orchestrators --iterations 5
+uv run compare-benchmarks --compare-dir benchmark_orchestrators --iterations 5
 ```
 
 This will run 5 iterations of each test case for each orchestrator found in the `benchmark_orchestrators` directory.

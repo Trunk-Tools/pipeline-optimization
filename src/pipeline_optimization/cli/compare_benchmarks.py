@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Benchmark comparison script for the data pipeline exercise.
 
@@ -336,6 +335,7 @@ async def main() -> None:
     )
     parser.add_argument(
         "--test-case",
+        "-t",
         type=str,
         default="small",
         help="Specify which test case to benchmark. Options: small, medium, large, all",
@@ -381,5 +381,9 @@ async def main() -> None:
     print_comparison_table(summary)
 
 
-if __name__ == "__main__":
+def main_sync():
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    main_sync()

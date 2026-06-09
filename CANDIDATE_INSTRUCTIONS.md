@@ -6,11 +6,11 @@ In this exercise, you'll optimize an inefficient data pipeline that processes te
 
 ## Getting Started
 
-1. Ensure you have [uv](https://docs.astral.sh/uv/) and [task](https://taskfile.dev/) installed
+1. Ensure you have [uv](https://docs.astral.sh/uv/) installed
 2. Clone the repository and `cd` into it
 3. Benchmark the current performance:
    ```
-   task benchmark -- --test-case small
+   uv run benchmark --test-case small
    ```
 
 ## Exercise Requirements
@@ -65,7 +65,7 @@ You should implement the following optimizations:
 After implementing your optimizations, benchmark your implementation:
 
 ```
-task benchmark
+uv run benchmark
 ```
 
 This will run all test cases and display metrics including:

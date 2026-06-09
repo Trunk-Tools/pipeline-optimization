@@ -64,6 +64,7 @@ async def main() -> None:
     )
     parser.add_argument(
         "--test-case",
+        "-t",
         type=str,
         default="small",
         help="Specify which test case to run. Options: small, medium, large, all",
@@ -116,5 +117,9 @@ async def main() -> None:
             print(f"Available test cases: {', '.join(test_cases.keys())}")
 
 
-if __name__ == "__main__":
+def main_sync():
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    main_sync()
