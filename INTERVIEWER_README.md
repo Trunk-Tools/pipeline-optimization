@@ -1,113 +1,52 @@
-# Data Pipeline Optimization Exercise - Interviewer Guide
+# Data Pipeline Optimization Exercise — Interviewer Guide
 
 ## Overview
 
-This exercise evaluates a candidate's ability to optimize a deliberately inefficient data pipeline. It focuses on key skills for a Staff Engineer:
+This exercise evaluates how a candidate approaches a deliberately inefficient data pipeline: what they notice, how they prioritize, and how they reason about trade-offs. Relevant skills include concurrency, error handling/resilience, resource and algorithmic optimization, and performance tuning.
 
-- Concurrent programming with async/await
-- Error handling and resilience
-- Resource optimization
-- Performance tuning
+Plan for ~35-45 minutes of working time plus 5-10 minutes for the candidate's questions.
 
-The exercise is designed to be completed in 45-60 minutes and provides clear metrics to evaluate the candidate's solution.
+## Key Files
 
-## Exercise Structure
-
-The repository is structured as follows:
-
-- `src/pipeline_optimization/orchestrator.py`: Contains the inefficient implementation that candidates need to optimize
-- `src/pipeline_optimization/tasks/`: Contains task functions with random failures (should not be modified)
-- `src/pipeline_optimization/metrics.py`: Implements metrics collection
-- `src/pipeline_optimization/benchmark.py`: Implements benchmarking functionality
-- `src/pipeline_optimization/run_benchmark.py`: Script to run benchmarks
-- `CANDIDATE_INSTRUCTIONS.md`: Instructions for the candidate
-- `example_solution.py`: A reference implementation showing potential optimizations
-
-## Evaluation Criteria
-
-The candidate's solution should be evaluated on:
-
-1. **Performance Improvement**
-
-   - How much did they improve runtime and throughput?
-   - Did they optimize memory and CPU usage?
-
-2. **Reliability**
-
-   - Does the solution handle random task failures?
-   - Is the error handling robust and properly implemented?
-
-3. **Code Quality**
-
-   - Is the code clean, well-structured, and maintainable?
-   - Is the solution properly typed and documented?
-
-4. **Design Decisions**
-   - Did they make appropriate choices for concurrency, caching, and error handling?
-   - Can they explain the tradeoffs of their approach?
+- `src/pipeline_optimization/orchestrator.py` — the inefficient implementation the candidate optimizes (the only file they should edit)
+- `src/pipeline_optimization/tasks/` — task functions with intermittent random failures; framed to the candidate as external APIs they can't modify
+- `src/pipeline_optimization/benchmarks/` — metrics and benchmarking logic
+- `src/pipeline_optimization/cli/` — the `run_benchmark` and `compare_benchmarks` entry points
+- `README.md` — what the candidate reads
+- `example_solution.py` — one reference solution
+- `benchmark_orchestrators/` — sample implementations for the comparison tool
 
 ## Running the Exercise
 
-1. Prepare the environment:
+1. Have the candidate read `README.md` and the header in `orchestrator.py`.
+2. Have them establish a baseline: `uv run benchmark --test-case small`
+3. Let them optimize `orchestrator.py`, thinking out loud as they go.
+4. Re-run `uv run benchmark` to measure the improvement.
 
-   ```
-   uv run main --test-case small
-   ```
+We deliberately don't hand the candidate a checklist of problems — discovering and prioritizing the issues is part of the evaluation. You can help with syntax so it doesn't block their thinking; candidates should not use AI assistants.
 
-2. Have the candidate review `CANDIDATE_INSTRUCTIONS.md`
+## What to Look For
 
-3. Have the candidate run benchmarks to see the current performance:
+- **Problem identification** — Did they find the issues that matter by reading and running the code?
+- **Prioritization** — Did they spend limited time on the highest-impact changes?
+- **Reasoning** — Can they explain their trade-offs and their concurrency / caching / error-handling choices?
+- **Reliability** — Does the solution stay correct and handle the random failures gracefully?
+- **Code quality** — Clean, readable, and sensibly typed.
 
-   ```
-   uv run benchmark
-   ```
-
-4. Instruct them to optimize `src/pipeline_optimization/orchestrator.py`
-
-5. After they're done, have them run benchmarks again to measure improvement:
-   ```
-   uv run benchmark
-   ```
-
-## Expected Improvements
-
-A good solution should show:
-
-- 2-10x improvement in runtime
-- Near 100% success rate (vs. frequent failures in the original)
-- Lower and more stable memory usage
-- Significantly higher throughput
+A strong solution typically shows a large runtime/throughput improvement, a near-100% success rate (vs. frequent failures in the baseline), and steadier memory use.
 
 ## Discussion Points
 
-After the exercise, discuss:
-
-1. What optimizations did you implement and why?
-2. How did you decide on your concurrency approach?
-3. What was your strategy for handling task failures?
-4. What additional improvements would you make given more time?
-5. How would you make this pipeline production-ready?
+- What did you change, and why those things first?
+- How did you choose your concurrency approach?
+- What was your strategy for the failing tasks?
+- What would you do with more time, or to make this production-ready?
 
 ## Reference Solution
 
-The file `example_solution.py` contains one possible solution with:
-
-- Module-level dictionary loading
-- Async processing with controlled concurrency
-- Retry mechanism with exponential backoff
-- Caching with `lru_cache`
-- Efficient data structures like `Counter`
-- Deduplication of repeated words
-
-This is just one approach - the candidate may implement different but equally valid solutions.
-
-## Timing Guide
-
-- 5 minutes: Introduce the exercise, have them read instructions
-- 40-45 minutes: Candidate implements optimizations
-- 10-15 minutes: Test the solution, discuss results and approach
+`example_solution.py` shows one approach: module-level dictionary loading, async processing with bounded concurrency, retry with exponential backoff, `lru_cache`, `Counter`, and word deduplication. Candidates may take different but equally valid paths.
 
 ## Troubleshooting
 
-1. If the benchmark runs too slowly, the `--test-case small` flag can be used to test only the smallest test case.
-2. If there are dependency issues, ensure the candidate uses the provided `uv` environment (`uv sync`).
+- Use `--test-case small` if benchmarks run too slowly.
+- For dependency issues, ensure they're using the `uv` environment (`uv sync`).
