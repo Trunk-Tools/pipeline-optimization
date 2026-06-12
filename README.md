@@ -1,13 +1,13 @@
-# Data Pipeline Take Home Exercise
+# Data Pipeline Optimization Exercise
 
-Hi! Welcome to the data pipeline take home exercise.
+Hi! Welcome to the data pipeline exercise. We'll work through this together — read the code, run it, and talk us through your thinking as you go.
 
-We've fabricated a made-up pipeline with the following requirements:
+We've built a small, made-up pipeline that:
 
-1. Accept a blob of text as input
-2. Blob should be analyzed for unique anagrams and report back the number of occurrences of words with those anagrams.
+1. Accepts a blob of text as input
+2. Finds the unique anagrams in it and reports how many times words with those anagrams occur
 
-For example, given the input "cat". The output should be:
+For example, given the input "cat", the output should be:
 
 ```
 {
@@ -17,14 +17,11 @@ For example, given the input "cat". The output should be:
 }
 ```
 
-The first version of the pipeline is implemented in `main.py`.
-We've provided you with some test cases in `resources/test_cases.json` that you can use to test your implementation. In fact, just running `main.py` will run the test cases for you.
+The current version lives in `src/pipeline_optimization/orchestrator.py`, and `resources/test_cases.json` holds the inputs it runs against — running `main` executes them for you.
 
-In order to simulate some real-life data pipeline behavior we've added some random failures at various stages. See `src/pipeline_optimization/tasks/task_decorator.py` its usages for more detail.
+Treat the task functions (`filter_input`, `get_words`, `find_anagrams`) as calls to external APIs you don't control and can't change.
 
-Your task is to improve this pipeline. You can do this in any way you see fit. You can refactor the code, add tests, add new features, or anything else you think would make the pipeline better so long as it continues to fulfill its function.
-
-We're interested in seeing how you think about data pipelines.
+Your task is to improve this pipeline however you see fit, so long as it keeps producing the same output. We're less interested in a checklist of fixes than in how you think about data pipelines:
 
 - How efficient is it?
 - How durable is it?
@@ -33,80 +30,39 @@ We're interested in seeing how you think about data pipelines.
 - How testable is it?
 - How observable is it?
 
-As you complete the exercise, please document your thought process in a README.md file. This is your opportunity to show us how you think about data pipelines and what you think is important in building them.
-
 ## Getting Started
 
-1. You'll need to install [uv](https://docs.astral.sh/uv/) and [task](https://taskfile.dev/)
-2. Clone this repo
-3. `cd pipeline-optimization`
-4. `uv run main`. This will set up your local virtual environment and run the pipeline for the "small" test case.
-   1. To run a specific test case or to run all of them use the `--test-case` flag: `uv run main --test-case small|medium|large|all`
+1. Install [uv](https://docs.astral.sh/uv/) (it sets up Python and the dependencies for you)
+2. Clone this repo and `cd pipeline-optimization`
+3. Run the pipeline on the small test case:
+   ```
+   uv run main --test-case small
+   ```
+   Use `--test-case small|medium|large|all` to pick which case(s) to run.
 
-## Benchmarking Tools
+## Benchmarking
 
-The repository includes two powerful benchmark tools to help you evaluate your optimizations:
+Measure the current implementation, then re-measure as you optimize:
 
-### Single Implementation Benchmark
-
-The `benchmark` command runs performance metrics on a single orchestrator implementation:
-
-```bash
-# Run benchmark on all test cases
-uv run benchmark
-
-# Run benchmark on a specific test case
+```
 uv run benchmark --test-case small
-
-# Run with more iterations for better statistical significance
-uv run benchmark --iterations 5
-
-# Show detailed metrics
-uv run benchmark --detailed
 ```
 
-This tool measures:
+Flags: `--test-case`, `--iterations N`, `--detailed`. To compare several implementations side by side, see `README_COMPARISON.md`.
 
-- Success rate (percentage of runs that complete without errors)
-- Average runtime (in milliseconds)
-- Throughput (words processed per second)
-- Memory usage (peak and growth)
-- CPU utilization
+## Ground Rules
 
-### Orchestrator Comparison Benchmark
+- **Only modify `src/pipeline_optimization/orchestrator.py`**
+- **Don't modify anything in the `tasks/` directory**
+- Keep the same output format and correctness
+- Plan for ~35-45 minutes of work — we'll save the last 5-10 minutes for any questions you have
 
-The `compare-benchmarks` command allows you to compare multiple orchestrator implementations side-by-side:
+## What We're Looking For
 
-```bash
-# Compare all orchestrators in a directory
-uv run compare-benchmarks --compare-dir benchmark_orchestrators
+- **Problem identification** – Did you find the issues that matter by reading and running the code?
+- **Prioritization** – Did you focus your limited time on the things with the biggest impact?
+- **Reasoning** – Can you explain your trade-offs and why you chose a given approach?
+- **Reliability** – Does the pipeline still produce correct results and handle failures gracefully?
+- **Code quality** – Is the implementation clean, readable, and a sensible use of Python?
 
-# Compare specific test case
-uv run compare-benchmarks --compare-dir benchmark_orchestrators --test-case small
-
-# Run more iterations for each test
-uv run compare-benchmarks --compare-dir benchmark_orchestrators --iterations 5
-
-# Show detailed metrics
-uv run compare-benchmarks --compare-dir benchmark_orchestrators --detailed
-```
-
-This tool:
-
-- Loads all Python files from the specified directory that contain a `TaskOrchestrator` class
-- Runs benchmarks for each implementation with the same test cases
-- Generates a side-by-side comparison table highlighting the best performers
-- Helps identify which optimization strategies are most effective
-
-For convenience, the repository includes a shell script `run_comparison.sh` that runs both the baseline benchmark and a comparison across all orchestrators in the `benchmark_orchestrators` directory.
-
-### Interpreting Benchmark Results
-
-When evaluating different implementations, consider these key metrics:
-
-- **Success Rate**: Higher is better - measures reliability and error handling
-- **Runtime**: Lower is better - measures overall performance
-- **Throughput**: Higher is better - measures processing efficiency
-- **Memory Usage**: Lower is better - measures resource efficiency
-
-The comparison benchmark will highlight the best value for each metric in green, making it easy to identify which implementation performs best in each category.
+Make one change at a time, measure its impact, and talk us through your thinking. Remember: a well-designed, reliable solution that's moderately faster beats a highly optimized but brittle one. Good luck!

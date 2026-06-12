@@ -1,3 +1,44 @@
+"""
+====================================================================
+START HERE — Data Pipeline Optimization Exercise
+====================================================================
+
+Welcome! This file (`orchestrator.py`) is the ONLY file you should
+edit. Everything below is here to get you started.
+
+1. SETUP
+   This project uses `uv` to manage Python and dependencies.
+   - Install it (one-time):
+       macOS/Linux:  curl -LsSf https://astral.sh/uv/install.sh | sh
+       Windows:      powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+       (or `brew install uv` / `pip install uv`)
+   - Then run the pipeline (uv sets up the venv + Python for you):
+       uv run main --test-case small
+
+2. GET ORIENTED
+   Open `src/pipeline_optimization/resources/test_cases.json` to see
+   the kind of input/output this pipeline deals with. Running `main`
+   executes against these test cases.
+
+3. MEASURE
+   Benchmark the current (deliberately inefficient) implementation so
+   you have a baseline to improve against:
+       uv run benchmark --test-case small
+   Re-run it as you optimize to track your impact.
+
+4. THINK OUT LOUD — AND PLEASE DON'T USE AI ASSISTANTS
+   This exercise is mostly about how you *think* about data pipelines,
+   not about memorizing syntax. Please talk through your thought
+   process as you go: what you notice, the trade-offs you're weighing,
+   and why you choose a given approach. Don't worry about getting
+   syntax perfect — your interviewer is happy to help with that if
+   needed. Just please don't use Copilot, Cursor AI, ChatGPT, or
+   similar tools; we want to see your own reasoning.
+
+Good luck!
+====================================================================
+"""
+
 import asyncio
 import json
 import sys
