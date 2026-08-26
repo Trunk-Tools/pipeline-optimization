@@ -12,13 +12,10 @@ edit. Everything below is here to get you started.
        macOS/Linux:  curl -LsSf https://astral.sh/uv/install.sh | sh
        Windows:      powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
        (or `brew install uv` / `pip install uv`)
-   - Then run the pipeline (uv sets up the venv + Python for you):
-       uv run main --test-case small
 
 2. GET ORIENTED
    Open `src/pipeline_optimization/resources/test_cases.json` to see
-   the kind of input/output this pipeline deals with. Running `main`
-   executes against these test cases.
+   the kind of input/output this pipeline deals with.
 
 3. MEASURE
    Benchmark the current (deliberately inefficient) implementation so
@@ -28,20 +25,13 @@ edit. Everything below is here to get you started.
 
 4. THINK OUT LOUD — AND PLEASE DON'T USE AI ASSISTANTS
    This exercise is mostly about how you *think* about data pipelines,
-   not about memorizing syntax. Please talk through your thought
-   process as you go: what you notice, the trade-offs you're weighing,
-   and why you choose a given approach. Don't worry about getting
-   syntax perfect — your interviewer is happy to help with that if
-   needed. Just please don't use Copilot, Cursor AI, ChatGPT, or
-   similar tools; we want to see your own reasoning.
+   not about memorizing syntax.
 
 Good luck!
 ====================================================================
 """
 
-import asyncio
 import json
-import sys
 import time
 from typing import Any
 
@@ -110,29 +100,3 @@ class TaskOrchestrator:
             "runtime": runtime_ms,
             "anagram_counts": anagram_counts,
         }
-
-
-async def main():
-    """Main entry point for the orchestrator script."""
-    # Get input text from command line argument or use a default
-    text_input = (
-        sys.argv[1]
-        if len(sys.argv) > 1
-        else "Hello world, this is a test input for anagram processing."
-    )
-
-    orchestrator = TaskOrchestrator()
-    result = await orchestrator.process_text(text_input)
-
-    print(f"Pipeline runtime: {result['runtime']:.2f} ms")
-    print("Anagram counts:")
-    for anagram, count in result["anagram_counts"].items():
-        print(f"  {anagram}: {count}")
-
-
-def main_sync():
-    asyncio.run(main())
-
-
-if __name__ == "__main__":
-    main_sync()
